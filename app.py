@@ -19,7 +19,8 @@ with open(model_path, "rb") as file:
 # ------------------------------------------------------
 # App configuration
 # ------------------------------------------------------
-st.set_page_config(page_title="Heart Disease Prediction", page_icon="🫀", layout="centered")
+st.set_page_config(page_title="Heart Disease Prediction",
+                   page_icon="🫀", layout="centered")
 
 st.title("🩺 Heart Disease Prediction App")
 st.write("This app predicts the likelihood of heart disease based on patient health data.")
@@ -43,7 +44,8 @@ col1, col2 = st.columns(2)
 with col1:
     Age = st.number_input("Age", 20, 100, 45)
     Gender = st.selectbox("Gender", ["Male", "Female"])
-    ChestPainType = st.selectbox("Chest Pain Type (0:Typical, 1:Atypical, 2:Non-Anginal, 3:Asymptomatic)", [0, 1, 2, 3])
+    ChestPainType = st.selectbox(
+        "Chest Pain Type (0:Typical, 1:Atypical, 2:Non-Anginal, 3:Asymptomatic)", [0, 1, 2, 3])
     RestingBp = st.number_input("Resting Blood Pressure (mm Hg)", 80, 200, 120)
     Cholesterol = st.number_input("Cholesterol (mg/dL)", 100, 600, 200)
 
@@ -80,21 +82,20 @@ input_dict = {
 
 input_df = pd.DataFrame([input_dict])
 
-# Encode categorical columns and align with training data
-input_encoded = pd.get_dummies(input_df, columns=categorical_cols, drop_first=True)
+input_encoded = pd.get_dummies(
+    input_df, columns=categorical_cols, drop_first=True)
 expected_features = model.feature_names_in_
 input_encoded = input_encoded.reindex(columns=expected_features, fill_value=0)
 
-# Scale numerical features
-input_encoded[numerical_cols] = scaler.fit_transform(input_encoded[numerical_cols])
+input_encoded[numerical_cols] = scaler.fit_transform(
+    input_encoded[numerical_cols])
 
-# ------------------------------------------------------
-# Prediction
-# ------------------------------------------------------
+
 if st.button("🩺 Predict Heart Disease Risk"):
     prediction = model.predict(input_encoded)[0]
     if prediction == 1:
-        st.error(" High risk of Heart Disease detected! Please consult a cardiologist.")
+        st.error(
+            " High risk of Heart Disease detected! Please consult a cardiologist.")
     else:
         st.success(" No signs of Heart Disease detected.")
 
